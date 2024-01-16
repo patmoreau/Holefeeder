@@ -1,0 +1,74 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+version: '3.8'
+
+services:
+
+  traefik:
+    image: "traefik"
+    container_name: "traefik"
+    command:
+      - "--global.sendAnonymousUsage=false"
+      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=traefik-public"
+      # Configure entrypoint
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      # SSL configuration
+      # - "--certificatesresolvers.letsencryptresolver.acme.httpchallenge=true"
+      # - "--certificatesresolvers.letsencryptresolver.acme.httpchallenge.entrypoint=web"
+      # - "--certificatesresolvers.letsencryptresolver.acme.email=user@domaine.com"
+      # - "--certificatesresolvers.letsencryptresolver.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=mail@yourdomain.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      # TLS entrypoints
+      - "--entrypoints.redis.address=:6379"
+      - "--entrypoints.master.address=:5432"
+      # Enable dashboard
+      - "--api.dashboard=true"
+      # Log configuration
+      - "--log.level=DEBUG"
+      - "--log.format=common"
+    ports:
+      - "16379:6379"
+      - "15432:5432"
+      - "443:443"
+      - "80:80"
+    volumes:
+      - traefik-certificates:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Map the certificats into the container
+      - .docker/certs:/etc/certs:ro
+    networks:
+      - traefik-public
+    labels:
+      - "traefik.enable=true"
+      # - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.localtest.me`)"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.tls=true"
+      # - "traefik.http.routers.traefik.tls.certresolver=letsencryptresolver"
+      - "traefik.http.routers.traefik.service=api@internal"
+      # Global HTTP -> HTTPS
+      - "traefik.http.routers.traefik.tls.domains[0].main=localtest.me"
+      - "traefik.http.routers.traefik.tls.domains[0].sans=*.localtest.me"
+      - "traefik.tls.stores.default.defaultCertificate.certfile=/etc/certs/localtest.me+4.pem"
+      - "traefik.tls.stores.default.defaultCertificate.keyfile=/etc/certs/localtest.me+4-key.pem"
+
+  holefeederapi:
+    image: holefeederapi
+    build:
+      context: .
+      dockerfile: src/Api/Holefeeder.Api/Dockerfile
+    ports:
+      - 5001:5001
+
+volumes:
+  traefik-certificates:
+networks:
+  traefik-public:

@@ -2,34 +2,27 @@
     "version": "0.2.0",
     "configurations": [
         {
-            // Use IntelliSense to find out which attributes exist for C# debugging
-            // Use hover for the description of the existing attributes
-            // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
-            "name": ".NET Core Launch (web)",
-            "type": "coreclr",
+            "name": "Docker .NET Core Launch (docker-compose)",
+            "type": "docker",
             "request": "launch",
-            "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/Api/Holefeeder.Api/bin/Debug/net6.0/Holefeeder.Api.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/src/Api/Holefeeder.Api",
-            "stopAtEntry": false,
-            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            "preLaunchTask": "docker-compose-run: debug",
+            "dockerCompose": {
+                "dockerComposeFile": "${workspaceFolder}/docker-compose.yml",
+                "service": "holefeederapi"
             },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Api/Holefeeder.Api/Holefeeder.Api.csproj",
+                "enableDebugging": true
             }
         },
         {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach"
+            "name": "Docker .NET Launch",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run: debug",
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Api/Holefeeder.Api/Holefeeder.Api.csproj"
+            }
         }
     ]
 }

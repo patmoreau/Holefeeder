@@ -1,0 +1,18 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+version: '3.4'
+
+services:
+  holefeederapi:
+    image: holefeederapi
+    build:
+      context: .
+      dockerfile: src/Api/Holefeeder.Api/Dockerfile
+      args:
+        - configuration=Debug
+    ports:
+      - 5001:5001
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw

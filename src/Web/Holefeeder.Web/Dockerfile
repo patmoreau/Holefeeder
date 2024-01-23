@@ -1,9 +1,18 @@
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+LABEL author="Drifter Apps Inc."
+WORKDIR /app
+EXPOSE 5001
+
+ENV ASPNETCORE_URLS=http://+:5001
+
+USER app
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG configuration=Release
+WORKDIR /src
+
 ###################################
 # Node and yarn install stage
 ###################################
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS pre-build
-WORKDIR /source
-
 # Download and import the Nodesource GPG key
 RUN apt-get update
 RUN apt-get install -y ca-certificates curl gnupg
@@ -25,63 +34,35 @@ RUN apt-get update
 RUN apt-get install -y yarn build-essential
 
 ###################################
-# Restore stage
+# Build stage
 ###################################
-FROM pre-build AS restore
+COPY ["DrifterApps.Holefeeder.sln", "."]
+COPY [".editorconfig", "."]
+COPY ["global.json", "."]
+COPY ["Directory.Build.props", "."]
+COPY ["nuget.config", "."]
 
-COPY *.sln .
-COPY .editorconfig .
-COPY global.json .
-COPY Directory.Build.props .
-COPY Directory.Build.targets .
-COPY Directory.Packages.props .
-COPY nuget.config .
-
-COPY src/Api/Holefeeder.Api/*.csproj src/Api/Holefeeder.Api/
-COPY src/Api/Holefeeder.Application/*.csproj src/Api/Holefeeder.Application/
-COPY src/Api/Holefeeder.Domain/*.csproj src/Api/Holefeeder.Domain/
-COPY src/Api/Holefeeder.Infrastructure/*.csproj src/Api/Holefeeder.Infrastructure/
-COPY src/Web/Holefeeder.Web/*.csproj src/Web/Holefeeder.Web/
-
-COPY src/Api/Holefeeder.UnitTests/*.csproj src/Api/Holefeeder.UnitTests/
-COPY src/Api/Holefeeder.Tests.Common/*.csproj src/Api/Holefeeder.Tests.Common/
-COPY src/Api/Holefeeder.FunctionalTests/*.csproj src/Api/Holefeeder.FunctionalTests/
+COPY ["src/Api/Holefeeder.Api/Holefeeder.Api.csproj", "src/Api/Holefeeder.Api/"]
+COPY ["src/Api/Holefeeder.Application/Holefeeder.Application.csproj", "src/Api/Holefeeder.Application/"]
+COPY ["src/Api/Holefeeder.Domain/Holefeeder.Domain.csproj", "src/Api/Holefeeder.Domain/"]
+COPY ["src/Api/Holefeeder.FunctionalTests/Holefeeder.FunctionalTests.csproj", "src/Api/Holefeeder.FunctionalTests/"]
+COPY ["src/Api/Holefeeder.Infrastructure/Holefeeder.Infrastructure.csproj", "src/Api/Holefeeder.Infrastructure/"]
+COPY ["src/Api/Holefeeder.Tests.Common/Holefeeder.Tests.Common.csproj", "src/Api/Holefeeder.Tests.Common/"]
+COPY ["src/Api/Holefeeder.UnitTests/Holefeeder.UnitTests.csproj", "src/Api/Holefeeder.UnitTests/"]
+COPY ["src/Web/Holefeeder.Web/Holefeeder.Web.csproj", "src/Web/Holefeeder.Web/"]
 
 RUN dotnet restore
 
-###################################
-# Build stage
-###################################
-FROM restore AS build
-ARG BUILD_VERSION=99.99.99
-ARG VERSION=${BUILD_VERSION:-99.99.99}
+COPY ["src/.", "src/"]
 
-WORKDIR /source
-COPY src/. src/.
-WORKDIR /source/src/Web/Holefeeder.Web
+WORKDIR "/src/src/Web/Holefeeder.Web"
+RUN dotnet build "Holefeeder.Web.csproj" -c $configuration -o /app/build
 
-RUN dotnet publish /property:Version=${VERSION} -c Release -o /app --no-restore
+FROM build AS publish
+ARG configuration=Release
+RUN dotnet publish "Holefeeder.Web.csproj" -c $configuration -o /app/publish /p:UseAppHost=false
 
-###################################
-# Unit tests stage
-###################################
-FROM build AS angulartests
-WORKDIR /source/src/Web/Holefeeder.Web/ClientApp
-
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-RUN sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-RUN apt-get update
-RUN apt --fix-broken install
-RUN apt-get install google-chrome-stable -y
-
-###################################
-# Final stage
-###################################
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
-LABEL author="Drifter Apps Inc."
-EXPOSE 80
-EXPOSE 443
-
+FROM base AS final
 WORKDIR /app
-COPY --from=build /app ./
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Holefeeder.Web.dll"]

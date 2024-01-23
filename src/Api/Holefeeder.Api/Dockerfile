@@ -1,4 +1,5 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+LABEL author="Drifter Apps Inc."
 WORKDIR /app
 EXPOSE 5001
 

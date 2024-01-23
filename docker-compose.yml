@@ -5,58 +5,47 @@ version: '3.8'
 services:
 
   traefik:
-    image: "traefik"
+    image: traefik:latest
     container_name: "traefik"
-    command:
-      - "--global.sendAnonymousUsage=false"
-      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--providers.docker.network=traefik-public"
-      # Configure entrypoint
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      # SSL configuration
-      # - "--certificatesresolvers.letsencryptresolver.acme.httpchallenge=true"
-      # - "--certificatesresolvers.letsencryptresolver.acme.httpchallenge.entrypoint=web"
-      # - "--certificatesresolvers.letsencryptresolver.acme.email=user@domaine.com"
-      # - "--certificatesresolvers.letsencryptresolver.acme.storage=/letsencrypt/acme.json"
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=mail@yourdomain.com"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-      # TLS entrypoints
-      - "--entrypoints.redis.address=:6379"
-      - "--entrypoints.master.address=:5432"
-      # Enable dashboard
-      - "--api.dashboard=true"
-      # Log configuration
-      - "--log.level=DEBUG"
-      - "--log.format=common"
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     ports:
       - "16379:6379"
       - "15432:5432"
       - "443:443"
       - "80:80"
     volumes:
-      - traefik-certificates:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # Map the certificats into the container
       - .docker/certs:/etc/certs:ro
     networks:
       - traefik-public
+    environment:
+      - TRAEFIK_API=true
+      - TRAEFIK_API_INSECURE=true
+      - TRAEFIK_GLOBAL_SENDANONYMOUSUSAGE=true
+      - TRAEFIK_LOG_LEVEL=DEBUG
+      - TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
+      - TRAEFIK_ENTRYPOINTS_HTTP_ADDRESS=:80
+      - TRAEFIK_ENTRYPOINTS_HTTP_HTTP_REDIRECTIONS_ENTRYPOINT_TO=https
+      - TRAEFIK_ENTRYPOINTS_HTTP_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME=https
+      - TRAEFIK_ENTRYPOINTS_HTTPS_ADDRESS=:443
+      - TRAEFIK_ENTRYPOINTS_SQL_ADDRESS=:3306
+      - TRAEFIK_ENTRYPOINTS_WHOAMI_ADDRESS=:5011
+      - TRAEFIK_ENTRYPOINTS_TRAEFIK_HTTP_TLS_DOMAINS_0_MAIN=localtest.me
+      - TRAEFIK_ENTRYPOINTS_TRAEFIK_HTTP_TLS_DOMAINS_0_SANS=*.localtest.me
     labels:
       - "traefik.enable=true"
       # - "traefik.http.services.traefik.loadbalancer.server.port=8080"
       - "traefik.http.routers.traefik.rule=Host(`traefik.localtest.me`)"
-      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.entrypoints=https"
       - "traefik.http.routers.traefik.tls=true"
       # - "traefik.http.routers.traefik.tls.certresolver=letsencryptresolver"
       - "traefik.http.routers.traefik.service=api@internal"
       # Global HTTP -> HTTPS
-      - "traefik.http.routers.traefik.tls.domains[0].main=localtest.me"
-      - "traefik.http.routers.traefik.tls.domains[0].sans=*.localtest.me"
+      # - "traefik.tls.certificates[0].certFile=/etc/certs/localtest.me+4.pem"
+      # - "traefik.tls.certificates[0].keyFile=/etc/certs/localtest.me+4-key.pem"
       - "traefik.tls.stores.default.defaultCertificate.certfile=/etc/certs/localtest.me+4.pem"
       - "traefik.tls.stores.default.defaultCertificate.keyfile=/etc/certs/localtest.me+4-key.pem"
 

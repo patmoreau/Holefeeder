@@ -2,9 +2,9 @@ version: '3.8'
 
 services:
 
-  reverse-proxy:
-    image: traefik
-    container_name: reverse-proxy
+  traefik:
+    image: traefik:latest
+    container_name: traefik
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -13,19 +13,40 @@ services:
       - 443:443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - TRAEFIK_API=true
+      - TRAEFIK_API_INSECURE=true
+      - TRAEFIK_GLOBAL_SENDANONYMOUSUSAGE=true
+      - TRAEFIK_LOG_LEVEL=DEBUG
+      - TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
+      - TRAEFIK_PROVIDERS_FILE_FILENAME=/etc/traefik/dynamic.yml
+      - TRAEFIK_ENTRYPOINTS_HTTP_ADDRESS=:80
+      - TRAEFIK_ENTRYPOINTS_HTTP_HTTP_REDIRECTIONS_ENTRYPOINT_TO=https
+      - TRAEFIK_ENTRYPOINTS_HTTP_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME=https
+      - TRAEFIK_ENTRYPOINTS_HTTPS_ADDRESS=:443
+      - TRAEFIK_ENTRYPOINTS_TRAEFIK_HTTP_TLS_DOMAINS_0_MAIN=$DOMAIN
+      - TRAEFIK_ENTRYPOINTS_TRAEFIK_HTTP_TLS_DOMAINS_0_SANS=*.$DOMAIN
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-proxy"
+      - "traefik.http.routers.traefik-router.rule=Host(`traefik.$DOMAIN`)"
+      - "traefik.http.routers.traefik-router.entrypoints=https"
+      - "traefik.http.routers.traefik-router.tls=true"
+      - "traefik.http.routers.traefik-router.service=api@internal"
 
   whoami:
-    image: traefik/whoami
+    image: traefik/whoami:latest
     container_name: whoami
     restart: unless-stopped
     labels:
-      traefik.enable: true
-      traefik.docker.network: proxy
-      traefik.http.routers.whoami-router.entrypoints: websecure
-      traefik.http.routers.whoami-router.tls: true
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-proxy"
+      - "traefik.http.routers.whoami-router.rule=Host(`whoami.$DOMAIN`)"
+      - "traefik.http.routers.whoami-router.entrypoints=https"
+      - "traefik.http.routers.whoami-router.tls=true"
 
   seq:
-    image: datalust/seq
+    image: datalust/seq:latest
     container_name: seq
     restart: unless-stopped
     environment:
@@ -36,15 +57,16 @@ services:
       - 80
       - 5341
     labels:
-      traefik.enable: true
-      traefik.docker.network: proxy
-      traefik.http.routers.seq-router.entrypoints: websecure
-      traefik.http.routers.seq-router.tls: true
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-proxy"
+      - "traefik.http.routers.seq-router.rule=Host(`seq.$DOMAIN`)"
+      - "traefik.http.routers.seq-router.entrypoints=https"
+      - "traefik.http.routers.seq-router.tls=true"
     volumes:
       - seq-data:/data
 
   mariadb:
-    image: mariadb
+    image: mariadb:latest
     container_name: mariadb
     restart: unless-stopped
     environment:
@@ -58,10 +80,14 @@ services:
       - mariadb-data:/var/lib/mysql
       - .docker/scripts/mysql-initdb.sh:/docker-entrypoint-initdb.d/mysql-initdb.sh
     labels:
-      traefik.enable: false
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-proxy"
+      - "traefik.tcp.routers.mariadb-router.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.mariadb-router.entrypoints=mysql"
+      - "traefik.tcp.services.mariadb-router.loadbalancer.server.port=3306"
 
   adminer:
-    image: adminer
+    image: adminer:latest
     container_name: adminer
     restart: unless-stopped
     depends_on:
@@ -69,10 +95,11 @@ services:
     expose:
       - 8080
     labels:
-      traefik.enable: true
-      traefik.docker.network: proxy
-      traefik.http.routers.adminer-router.entrypoints: websecure
-      traefik.http.routers.adminer-router.tls: true
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-proxy"
+      - "traefik.http.routers.adminer-router.rule=Host(`adminer.$DOMAIN`)"
+      - "traefik.http.routers.adminer-router.entrypoints=https"
+      - "traefik.http.routers.adminer-router.tls=true"
 
   api:
     container_name: api
@@ -80,17 +107,18 @@ services:
     depends_on:
       - mariadb
     expose:
-      - 80
+      - 5001
     environment:
-      ASPNETCORE_URLS: http://+
+      # ASPNETCORE_URLS: http://+
       AzureAdB2C__ClientId: ${AZUREADB2C_CLIENTID}
     labels:
-      traefik.enable: true
-      traefik.docker.network: proxy
-      traefik.http.routers.api-router.entrypoints: websecure
-      traefik.http.routers.api-router.tls: true
-      traefik.http.routers.api-router.middlewares: gateway-remover
-      traefik.http.middlewares.gateway-remover.stripprefix.prefixes: /gateway
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-proxy"
+      - "traefik.http.routers.api-router.rule=Host(`holefeeder.$DOMAIN`) && (PathPrefix(`/gateway`) || PathPrefix(`/swagger`))"
+      - "traefik.http.routers.api-router.entrypoints=https"
+      - "traefik.http.routers.api-router.tls=true"
+      - "traefik.http.routers.api-router.middlewares=gateway-remover"
+      - "traefik.http.middlewares.gateway-remover.stripprefix.prefixes=/gateway"
 
   web:
     container_name: web
@@ -100,15 +128,16 @@ services:
     environment:
       ASPNETCORE_HOSTINGSTARTUPASSEMBLIES: Microsoft.AspNetCore.SpaProxy
       ASPNETCORE_URLS: http://+
+      AngularSettings__RedirectUrl: https://holefeeder.$DOMAIN
     labels:
-      traefik.enable: true
-      traefik.docker.network: proxy
-      traefik.http.routers.web-router.entrypoints: websecure
-      traefik.http.routers.web-router.tls: true
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-proxy"
+      - "traefik.http.routers.web-router.rule=Host(`holefeeder.$DOMAIN`) && !(PathPrefix(`/gateway`) || PathPrefix(`/swagger`))"
+      - "traefik.http.routers.web-router.entrypoints=https"
+      - "traefik.http.routers.web-router.tls=true"
 
 networks:
-  default:
-    name: proxy
+  traefik-proxy:
 
 volumes:
   mariadb-data:

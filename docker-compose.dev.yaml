@@ -2,51 +2,38 @@ version: '3.8'
 
 services:
 
-  reverse-proxy:
+  traefik:
     ports:
-      - 5011:5011
-      - 5012:5012
+      - 3306:3306
     volumes:
-      # Map the static configuration into the container
-      - .docker/dev/traefik.yml:/etc/traefik/traefik.yml:ro
-      # Map the dynamic configuration into the container
+      # Traefik dynamic configuration
       - .docker/dev/dynamic.yml:/etc/traefik/dynamic.yml:ro
-      # Map the certificats into the container
+      # Development certificats
       - .docker/certs:/etc/certs:ro
+    environment:
+      - TRAEFIK_ENTRYPOINTS_MYSQL_ADDRESS=:3306
+    # labels:
+    #   - "traefik.http.routers.traefik-router.rule=Host(`traefik.$DOMAIN`, `localhost`)"
 
-  whoami:
-    labels:
-      traefik.http.routers.whoami-router.entrypoints: websecure,whoami
-      traefik.http.routers.whoami-router.rule: Host(`whoami.localtest.me`, `localhost`)
-
-  seq:
-    labels:
-      traefik.http.routers.seq-router.rule: Host(`seq.localtest.me`)
+  # mariadb:
 
   api:
+    image: holefeeder_api
     build:
       context: .
       dockerfile: ./src/Api/Holefeeder.Api/Dockerfile
-      tags:
-        - "${DOCKER_REGISTRY:-holefeeder}/holefeeder-api:${VERSION:-latest}"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__BudgetingConnectionString: Server=mariadb;Port=3306;User Id=root;Password=${MARIADB_ROOT_PASSWORD};Database=budgeting_dev;
       Serilog__WriteTo__1__Args__apiKey: ${SEQ_API_KEY}
-    labels:
-      traefik.http.routers.api-router.rule: 'Host(`holefeeder.localtest.me`) && (PathPrefix(`/gateway`) || PathPrefix(`/swagger`))'
 
   web:
+    image: holefeeder_web
     build:
       context: .
       dockerfile: ./src/Web/Holefeeder.Web/Dockerfile
-      tags:
-        - "${DOCKER_REGISTRY:-holefeeder}/holefeeder-web:${VERSION:-latest}"
     expose:
       - 80
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       Serilog__WriteTo__1__Args__apiKey: ${SEQ_API_KEY}
-      AngularSettings__RedirectUrl: https://holefeeder.localtest.me
-    labels:
-      traefik.http.routers.web-router.rule: 'Host(`holefeeder.localtest.me`) && !(PathPrefix(`/api`) || PathPrefix(`/swagger`))'

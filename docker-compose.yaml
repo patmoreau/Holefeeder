@@ -10,6 +10,7 @@ services:
       - no-new-privileges:true
     ports:
       - 80:80
+      - 8080:8080
       - 443:443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -33,6 +34,7 @@ services:
       - "traefik.http.routers.traefik-router.entrypoints=https"
       - "traefik.http.routers.traefik-router.tls=true"
       - "traefik.http.routers.traefik-router.service=api@internal"
+      - "traefik.tcp.routers.api.entrypoints=mariadb"
 
   whoami:
     image: traefik/whoami:latest
@@ -74,17 +76,19 @@ services:
       MYSQL_DATABASE: holefeeder
       MYSQL_USER: ${MARIADB_USER}
       MYSQL_PASSWORD: ${MARIADB_PASSWORD}
-    expose:
-      - 3306
     volumes:
       - mariadb-data:/var/lib/mysql
-      - .docker/scripts/mysql-initdb.sh:/docker-entrypoint-initdb.d/mysql-initdb.sh
+      # - .docker/scripts/mysql-initdb.sh:/docker-entrypoint-initdb.d/mysql-initdb.sh
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=traefik-proxy"
+      # - "traefik.docker.network=traefik-proxy"
+      # routers (needed for mariadb service)
       - "traefik.tcp.routers.mariadb-router.rule=HostSNI(`*`)"
-      - "traefik.tcp.routers.mariadb-router.entrypoints=mysql"
-      - "traefik.tcp.services.mariadb-router.loadbalancer.server.port=3306"
+      - "traefik.tcp.routers.mariadb-router.entrypoints=mariadb"
+      - "traefik.tcp.routers.mariadb-router.service=mariadb"
+      - "traefik.tcp.routers.mariadb-router.tls.passthrough=true"
+      # services (needed for mariadb service)
+      - "traefik.tcp.services.mariadb.loadbalancer.server.port=3306"
 
   adminer:
     image: adminer:latest

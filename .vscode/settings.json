@@ -1,3 +1,17 @@
 {
-    "WhiteSource Advise.Diff.BaseBranch": "main"
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MariaDB",
+            "name": "holefeeder",
+            "database": "budgeting",
+            "username": "root"
+        }
+    ]
 }

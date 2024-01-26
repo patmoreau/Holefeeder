@@ -11,7 +11,7 @@ services:
       # Development certificats
       - .docker/certs:/etc/certs:ro
     environment:
-      - TRAEFIK_ENTRYPOINTS_MYSQL_ADDRESS=:3306
+      - TRAEFIK_ENTRYPOINTS_MARIADB_ADDRESS=:3306
     # labels:
     #   - "traefik.http.routers.traefik-router.rule=Host(`traefik.$DOMAIN`, `localhost`)"
 

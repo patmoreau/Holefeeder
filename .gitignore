@@ -370,3 +370,6 @@ linter-report/
 .certs/
 .env
 src/Web/Holefeeder.Web/ClientApp/eslint-report.md
+**/.meteor/generated/*.json
+coverage/*
+**/.meteor/

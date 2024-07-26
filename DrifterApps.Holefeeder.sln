@@ -1,10 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CD45B216-6211-42CF-922B-7145CB050457}"
-ProjectSection(SolutionItems) = preProject
-	.editorconfig = .editorconfig
-	global.json = global.json
-EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		global.json = global.json
+		Directory.Packages.props = Directory.Packages.props
+		Directory.Build.targets = Directory.Build.targets
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D656D1B9-4F13-4BAB-9117-60F22C30F331}"
 EndProject
@@ -29,6 +34,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Holefeeder.FunctionalTests", "tests\Holefeeder.FunctionalTests\Holefeeder.FunctionalTests.csproj", "{67765F3D-20D7-4AA8-8772-4592EEDEF921}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Holefeeder.UnitTests", "tests\Holefeeder.UnitTests\Holefeeder.UnitTests.csproj", "{C461DDB4-348C-41AC-924B-093B45D91275}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ui", "Ui", "{76315CC1-F97E-43E7-BBCB-1982C383ECB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Holefeeder.Ui.Common", "src\Holefeeder.Ui.Common\Holefeeder.Ui.Common.csproj", "{CDB0E3FF-FBAC-4C17-A554-CA90CCE967A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Holefeeder.Ui.Web", "src\Holefeeder.Ui.Web\Holefeeder.Ui.Web.csproj", "{41A608E3-F9D5-4088-8FA9-EC55FCD2705E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Holefeeder.Ui.Maui", "src\Holefeeder.Ui.Maui\Holefeeder.Ui.Maui.csproj", "{6CCF7ACD-4BE4-4103-A35A-F2AE91987195}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,6 +81,18 @@ Global
 		{C461DDB4-348C-41AC-924B-093B45D91275}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C461DDB4-348C-41AC-924B-093B45D91275}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C461DDB4-348C-41AC-924B-093B45D91275}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDB0E3FF-FBAC-4C17-A554-CA90CCE967A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDB0E3FF-FBAC-4C17-A554-CA90CCE967A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDB0E3FF-FBAC-4C17-A554-CA90CCE967A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDB0E3FF-FBAC-4C17-A554-CA90CCE967A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41A608E3-F9D5-4088-8FA9-EC55FCD2705E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41A608E3-F9D5-4088-8FA9-EC55FCD2705E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41A608E3-F9D5-4088-8FA9-EC55FCD2705E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41A608E3-F9D5-4088-8FA9-EC55FCD2705E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CCF7ACD-4BE4-4103-A35A-F2AE91987195}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CCF7ACD-4BE4-4103-A35A-F2AE91987195}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CCF7ACD-4BE4-4103-A35A-F2AE91987195}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CCF7ACD-4BE4-4103-A35A-F2AE91987195}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +108,10 @@ Global
 		{91253FAD-9C8A-4A11-A82E-4D756145B690} = {71B41F94-986D-4BEB-A9F5-2C3875C57DBE}
 		{67765F3D-20D7-4AA8-8772-4592EEDEF921} = {71B41F94-986D-4BEB-A9F5-2C3875C57DBE}
 		{C461DDB4-348C-41AC-924B-093B45D91275} = {71B41F94-986D-4BEB-A9F5-2C3875C57DBE}
+		{76315CC1-F97E-43E7-BBCB-1982C383ECB8} = {D656D1B9-4F13-4BAB-9117-60F22C30F331}
+		{CDB0E3FF-FBAC-4C17-A554-CA90CCE967A9} = {76315CC1-F97E-43E7-BBCB-1982C383ECB8}
+		{41A608E3-F9D5-4088-8FA9-EC55FCD2705E} = {76315CC1-F97E-43E7-BBCB-1982C383ECB8}
+		{6CCF7ACD-4BE4-4103-A35A-F2AE91987195} = {76315CC1-F97E-43E7-BBCB-1982C383ECB8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {083F9D38-7496-44CA-B1E2-9C04BA3DD0A6}

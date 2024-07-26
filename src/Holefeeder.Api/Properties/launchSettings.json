@@ -1,15 +1,15 @@
 {
-    "$schema": "https://json.schemastore.org/launchsettings.json",
-    "profiles": {
-        "Holefeeder.Api": {
-            "commandName": "Project",
-            "launchUrl": "swagger",
-            "applicationUrl": "https://localhost:5001;http://localhost:5000",
-            "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Development",
-                "Serilog__WriteTo__1__Args__serverUrl": "http://seq-ingestion.localtest.me:30341",
-                "Serilog__WriteTo__1__Args__apiKey": "51Jtjg8CphnrpOYcQt9v"
-            }
-        }
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "Holefeeder.Api": {
+      "commandName": "Project",
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:5001;http://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Serilog__WriteTo__1__Args__serverUrl": "http://seq-ingestion.localtest.me:30341",
+        "Serilog__WriteTo__1__Args__apiKey": "51Jtjg8CphnrpOYcQt9v"
+      }
     }
+  }
 }

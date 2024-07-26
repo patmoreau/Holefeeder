@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+
+    <PropertyGroup>
         <UserSecretsId>66510254-e437-414e-986e-d59d04ff1d07</UserSecretsId>
     </PropertyGroup>
 
@@ -9,7 +13,7 @@
         <PackageReference Include="DrifterApps.Seeds.Testing" />
         <PackageReference Include="FluentAssertions" />
         <PackageReference Include="FluentAssertions.Analyzers" />
-        <PackageReference Include="IdentityModel"/>
+        <PackageReference Include="IdentityModel" />
         <PackageReference Include="JunitXml.TestLogger" />
         <PackageReference Include="LightBDD.XUnit2" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
@@ -18,10 +22,10 @@
         <PackageReference Include="NSubstitute" />
         <PackageReference Include="Respawn" />
         <PackageReference Include="WireMock.Net" />
-        <PackageReference Include="xunit"/>
-        <PackageReference Include="xunit.analyzers"/>
-        <PackageReference Include="xunit.categories"/>
-        <PackageReference Include="xunit.runner.visualstudio"/>
+        <PackageReference Include="xunit" />
+        <PackageReference Include="xunit.analyzers" />
+        <PackageReference Include="xunit.categories" />
+        <PackageReference Include="xunit.runner.visualstudio" />
     </ItemGroup>
 
     <ItemGroup>

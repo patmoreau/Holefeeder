@@ -9,6 +9,8 @@ using Holefeeder.Infrastructure.Extensions;
 
 using Serilog;
 
+using ServiceCollectionExtensions = Holefeeder.Api.Extensions.ServiceCollectionExtensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((context, configuration) => configuration
@@ -37,10 +39,13 @@ if (!app.Environment.IsDevelopment())
 app.UseSwagger(builder.Environment, builder.Configuration)
     .UseHealthChecks()
     .UseHangfire()
-    .MapCarter();
+    .UseRouting();
 
-app.UseAuthentication()
+app.UseCors(ServiceCollectionExtensions.AllowBlazorClientPolicy)
+    .UseAuthentication()
     .UseAuthorization();
+
+app.MapCarter();
 
 app.MigrateDb();
 

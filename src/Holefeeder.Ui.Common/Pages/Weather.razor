@@ -1,0 +1,77 @@
+﻿@page "/weather"
+@inject IHolefeederApiService HolefeederApiService
+
+<PageTitle>Weather forecast</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Weather forecast</MudText>
+<MudText Class="mb-8">This component demonstrates fetching data from the server.</MudText>
+@if (_accountTypes == null)
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true"/>
+}
+else
+{
+    <MudText Typo="Typo.h5">@_settings?.FirstOrDefault()?.Data</MudText>
+    <MudTable Items="_settings" Hover="true" SortLabel="Sort By" Elevation="0">
+        <HeaderContent>
+            <MudTh>
+                <MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<AccountType, object>(x => x.Name)">Name</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<AccountType, object>(x => x.Multiplier)">Multiplier</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<AccountType, object>(x => x.Value)">Value</MudTableSortLabel>
+            </MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context</MudTd>
+            <MudTd DataLabel="Multiplier">soon</MudTd>
+            <MudTd DataLabel="Value">soon</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new[] {50, 100}"/>
+        </PagerContent>
+    </MudTable>
+    <MudTable Items="_accountTypes" Hover="true" SortLabel="Sort By" Elevation="0">
+        <HeaderContent>
+            <MudTh>
+                <MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<AccountType, object>(x => x.Name)">Name</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<AccountType, object>(x => x.Multiplier)">Multiplier</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<AccountType, object>(x => x.Value)">Value</MudTableSortLabel>
+            </MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context</MudTd>
+            <MudTd DataLabel="Multiplier">soon</MudTd>
+            <MudTd DataLabel="Value">soon</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new[] {50, 100}"/>
+        </PagerContent>
+    </MudTable>
+}
+
+@code {
+    private IList<string>? _accountTypes;
+    private IList<StoreItem>? _settings;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var settings = await HolefeederApiService.GetStoreItem("settings");
+        if (settings is {IsSuccessStatusCode: true, Content: not null})
+        {
+            _settings = settings.Content;
+        }
+        var types = await HolefeederApiService.GetAccountTypes();
+        if (types is {IsSuccessStatusCode: true, Content: not null})
+        {
+            _accountTypes = types.Content;
+        }
+    }
+
+}

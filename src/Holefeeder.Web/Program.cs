@@ -4,11 +4,9 @@ using HealthChecks.UI.Client;
 
 using Holefeeder.Web.Config;
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Logging;
 
 using Serilog;
@@ -22,9 +20,6 @@ builder.Services.AddHttpLogging(_ => { });
 builder.Services.AddControllersWithViews();
 builder.Services.Configure<AngularSettings>(builder.Configuration.GetSection(nameof(AngularSettings)))
     .AddSingleton(sp => sp.GetRequiredService<IOptions<AngularSettings>>().Value);
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
-builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration, "AzureAdB2C");
 
 var apiUri = builder.Configuration.GetValue<string>("Api:Url") ??
              throw new InvalidOperationException("Missing `Api:Url` configuration");
@@ -45,9 +40,6 @@ builder.Services
 var tags = new[] { "holefeeder", "web", "service" };
 builder.Services.AddHealthChecks().AddCheck("web", () => HealthCheckResult.Healthy(), tags);
 
-builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("customPolicy", policy => policy.RequireAuthenticatedUser());
-
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -64,9 +56,6 @@ app.UseHttpLogging();
 
 app.UseStaticFiles();
 app.UseRouting();
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapCarter();
 

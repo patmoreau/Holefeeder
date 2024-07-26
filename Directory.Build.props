@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Project>
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <Deterministic>false</Deterministic>
     <LangVersion>default</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -10,7 +10,7 @@
     <AnalysisMode>All</AnalysisMode>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <EnablePackageManagement>true</EnablePackageManagement>
   </PropertyGroup>
@@ -19,6 +19,14 @@
     <Product>DrifterApps.Holefeeder</Product>
     <Authors>Patrick Moreau</Authors>
     <Copyright>Drifter Apps Inc.</Copyright>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableSourceControlManagerQueries>true</EnableSourceControlManagerQueries>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);S2094;CA1711;S1144</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

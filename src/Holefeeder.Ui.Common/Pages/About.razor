@@ -1,0 +1,11 @@
+@page "/about"
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+<MudText Typo="Typo.h3" GutterBottom="true">Holefeeder</MudText>
+
+<MudText Class="mb-8">Environment: @Environment</MudText>
+
+@code {
+    private string Environment => Configuration["Environment"]!;
+}

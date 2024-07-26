@@ -1,0 +1,49 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "dotnet.unitTests.runSettingsPath": ".runsettings",
+        "coverage-gutters.coverageFileNames": [
+            "lcov.info",
+            "cov.xml",
+            "coverage.xml",
+            "jacoco.xml",
+            "coverage.cobertura.xml"
+        ],
+        "editor.formatOnSave": true,
+        "[javascript]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[typescript]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "prettier.singleQuote": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit",
+            "source.fixAll.eslint": "explicit"
+        },
+        "eslint.validate": [
+            "javascript",
+            "typescript"
+        ],
+        "sqltools.connections": [
+            {
+                "mysqlOptions": {
+                    "authProtocol": "default",
+                    "enableSsl": "Disabled"
+                },
+                "previewLimit": 50,
+                "server": "localhost",
+                "port": 3306,
+                "driver": "MariaDB",
+                "name": "mariadb",
+                "database": "budgeting_dev",
+                "username": "root",
+                "askForPassword": true
+            }
+        ],
+    }
+}

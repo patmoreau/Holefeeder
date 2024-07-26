@@ -24,3 +24,16 @@ You will need the following:
 
 1. [Docker](https://www.docker.com/)
 1. [.Net 8](https://dotnet.microsoft.com/en-us/download)
+
+## Getting ready
+
+### install report generator
+
+```bash
+dotnet new tool-manifest
+dotnet tool install dotnet-reportgenerator-globaltool
+```
+
+### generate code coverage report
+
+Run task 'code coverage'

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+  <CoverletSettings>
+    <Thresholds>
+      <Threshold>80</Threshold> <!-- Overall threshold in percentage -->
+      <ThresholdStat>line, branch, method</ThresholdStat> <!-- The type of coverage to apply thresholds on -->
+    </Thresholds>
+    <Exclude>
+      <Attribute>Obsolete</Attribute> <!-- Exclude methods marked with specific attributes -->
+    </Exclude>
+    <Include>
+      <Type>MyProject.MyImportantNamespace.*</Type> <!-- Include specific namespaces -->
+    </Include>
+    <IncludeDirectory></IncludeDirectory> <!-- Additional directories to include -->
+    <SingleHit>false</SingleHit> <!-- Disable single hit to collect multiple hits -->
+  </CoverletSettings>
+</Configuration>

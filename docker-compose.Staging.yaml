@@ -1,0 +1,49 @@
+services:
+  reverse-proxy:
+    volumes:
+      # Map the certificats into the container
+      - .docker/certs:/etc/certs:ro
+
+  mariadb:
+    ports:
+      - 3306:3306
+
+  api:
+    build:
+      context: .
+      dockerfile: ./src/Holefeeder.Api/Dockerfile
+      tags:
+        - '${DOCKER_REGISTRY:-holefeeder}/holefeeder-api:${VERSION:-latest}'
+    environment:
+      FeatureManagement__temp-new-azure-b2c-config: true
+
+  web:
+    build:
+      context: .
+      dockerfile: ./src/Holefeeder.Web/Dockerfile
+      tags:
+        - '${DOCKER_REGISTRY:-holefeeder}/holefeeder-web:${VERSION:-latest}'
+
+  ui:
+    container_name: ui
+    restart: unless-stopped
+    depends_on:
+      - api
+    build:
+      context: .
+      dockerfile: ./src/Holefeeder.Ui.Web/Dockerfile
+      tags:
+        - '${DOCKER_REGISTRY:-holefeeder}/holefeeder-ui:${VERSION:-latest}'
+    expose:
+      - 80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ENV}
+    volumes:
+      - .docker/nginx/nginx.Staging.conf:/etc/nginx/nginx.conf:ro
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.docker.network=proxy'
+      - 'traefik.http.routers.ui-router.entrypoints=websecure'
+      - 'traefik.http.routers.ui-router.rule=Host(`holefeeder-ui.${DOMAIN}`)'
+      - 'traefik.http.routers.ui-router.tls=true'
+      - 'traefik.http.routers.ui-router.tls.certresolver=acme_certresolver'

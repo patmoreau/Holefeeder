@@ -391,5 +391,5 @@ jobs:
     if: always() && needs.check_changes.result == 'success'
     with:
       code_was_changed: ${{ needs.check_changes.outputs.code_was_changed }}
-      check_name: 'build-completed'
+      check_name: "build-completed"
       check_result: ${{ needs.tests.result }}

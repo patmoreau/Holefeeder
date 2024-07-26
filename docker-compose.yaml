@@ -108,7 +108,7 @@ services:
       - 'traefik.enable=true'
       - 'traefik.docker.network=proxy'
       - 'traefik.http.routers.api-router.entrypoints=websecure'
-      - 'traefik.http.routers.api-router.rule=Host(`holefeeder.${DOMAIN}`) && PathPrefix(`/gateway`)'
+      - 'traefik.http.routers.api-router.rule=(Host(`holefeeder.${DOMAIN}`) || Host(`holefeeder-ui.${DOMAIN}`)) && PathPrefix(`/gateway`)'
       - 'traefik.http.routers.api-router.tls=true'
       - 'traefik.http.routers.api-router.tls.certresolver=acme_certresolver'
       - 'traefik.http.routers.api-router.middlewares=gateway-remover'

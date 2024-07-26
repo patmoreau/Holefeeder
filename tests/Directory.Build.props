@@ -5,6 +5,15 @@
     <NoWarn>$(NoWarn);S2094</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <CollectCoverage>true</CollectCoverage>
+    <CoverletOutput>$(MSBuildThisFileDirectory)../coverage/</CoverletOutput>
+    <CoverletOutputFormat>cobertura</CoverletOutputFormat>
+    <!-- <CoverletExclude>**/Migrations/**</CoverletExclude> -->
+    <!-- <CoverletInclude>$(CoverletInclude)</CoverletInclude> -->
+    <CoverletRunSettings>$(MSBuildThisFileDirectory)coverlet.runsettings</CoverletRunSettings>
+  </PropertyGroup>
+
   <ItemGroup>
     <AssemblyAttribute Include="System.CLSCompliantAttribute">
       <_Parameter1>false</_Parameter1>

@@ -1,0 +1,10 @@
+﻿<MudNavMenu>
+    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+    <AuthorizeView>
+        <Authorized>
+            <MudNavLink Href="dashboard" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
+            <MudNavLink Href="weather" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.List">Fetch data</MudNavLink>
+        </Authorized>
+    </AuthorizeView>
+    <MudNavLink Href="about" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.SafetyCheck">About</MudNavLink>
+</MudNavMenu>

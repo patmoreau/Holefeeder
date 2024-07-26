@@ -1,5 +1,3 @@
-using System.Security.Claims;
-
 using Holefeeder.Application.Authorization;
 using Holefeeder.Domain.Features.Accounts;
 using Holefeeder.Domain.Features.Categories;

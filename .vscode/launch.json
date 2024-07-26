@@ -2,34 +2,51 @@
     "version": "0.2.0",
     "configurations": [
         {
-            // Use IntelliSense to find out which attributes exist for C# debugging
-            // Use hover for the description of the existing attributes
-            // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
-            "name": ".NET Core Launch (web)",
-            "type": "coreclr",
+            "name": ".NET Meteor Debugger",
+            "type": "dotnet-meteor.debugger",
             "request": "launch",
-            "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/Api/Holefeeder.Api/bin/Debug/net6.0/Holefeeder.Api.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/src/Api/Holefeeder.Api",
-            "stopAtEntry": false,
-            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
-            }
+            "preLaunchTask": "dotnet-meteor: build"
         },
         {
-            "name": ".NET Core Attach",
+            "name": "Launch and Debug Blazor WebAssembly",
+            "type": "blazorwasm",
+            "request": "launch",
+            "browser": "edge",
+            "cwd": "${workspaceFolder}/src/Holefeeder.Ui.Web",
+            "url": "https://localhost:7172"
+        },
+        {
+            "name": "Watch Holefeeder.Ui.Web",
             "type": "coreclr",
-            "request": "attach"
+            "request": "launch",
+            "cwd": "${workspaceFolder}/src/Holefeeder.Ui.Web",
+            "program": "dotnet",
+            "args": [
+                "watch",
+                "run",
+                "--launch-profile",
+                "DevServer",
+                "--verbose" // Let's us confirm browser connects with hot reload capabilities
+            ],
+            "preLaunchTask": "build" // Ensure we don't watch an unbuilt site
+        },
+        {
+            "name": "Attach Holefeeder.Ui.Web",
+            "type": "blazorwasm",
+            "request": "attach",
+            "cwd": "${workspaceFolder}/src/Holefeeder.Ui.Web",
+            "browser": "edge",
+            "url": "https://localhost:7172", // Tell launch where to find site
+            "timeout": 120000, // Allows time for the site to launch
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Holefeeder.Ui.Web",
+            "configurations": [
+                "Watch Holefeeder.Ui.Web",
+                "Attach Holefeeder.Ui.Web"
+            ]
         }
     ]
 }

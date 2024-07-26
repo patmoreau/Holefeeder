@@ -34,3 +34,4 @@ services:
       target: angulartests
     volumes:
       - ./tests-results/:/TestResults
+

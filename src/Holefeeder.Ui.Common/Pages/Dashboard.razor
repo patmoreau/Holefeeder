@@ -1,0 +1,47 @@
+﻿@page "/dashboard"
+@inject IHolefeederApiService HolefeederApiService
+
+<PageTitle>Upcoming cashflows</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Upcoming cashflows</MudText>
+<MudText Class="mb-8">@_cashflows?.Count cashflows</MudText>
+@if (_cashflows == null)
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}
+else
+{
+    <MudTable Items="_cashflows" Hover="true" SortLabel="Sort By" Elevation="0">
+    <ColGroup>
+        <col />
+        <col style="width: 100%;" />
+    </ColGroup>
+    <RowTemplate>
+        <MudTd>
+            <MudIconButton Icon="@Icons.Material.Filled.AddShoppingCart" Color="Color.Primary" />
+        </MudTd>
+        <MudTd>
+            <TransactionList Description="@context.Description" Amount="@context.Amount" Date="@context.Date"
+                Tags="@context.Tags" />
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager PageSizeOptions="new[] {10, 50, 100}" />
+    </PagerContent>
+</MudTable>
+}
+
+@code {
+    private IReadOnlyList<Upcoming>? _cashflows;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await HolefeederApiService.GetUpcomingCashflows(DateOnly.FromDateTime(DateTime.Now),
+        DateOnly.FromDateTime(DateTime.Now.AddMonths(1)));
+        if (result is { IsSuccessStatusCode: true, Content: not null })
+        {
+            _cashflows = result.Content;
+        }
+    }
+
+}

@@ -1,0 +1,47 @@
+﻿@using Holefeeder.Ui.Common.Authentication
+@inject IAuthNavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<AuthorizeView>
+    <Authorized>
+        @Salutation
+        <MudIconButton Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" @onclick="OnLogoutClicked"/>
+    </Authorized>
+    <NotAuthorized>
+        <MudIconButton Icon="@Icons.Material.Filled.Login" Color="Color.Inherit" @onclick="OnLoginClicked"/>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code{
+
+    private string? _salutation;
+
+    private string? Salutation
+    {
+        get => _salutation;
+        set
+        {
+            if (_salutation == value) return;
+            _salutation = value;
+            StateHasChanged();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var nameClaim = state.User.Claims.FirstOrDefault(c => c.Type == "name");
+        Salutation = nameClaim != null ? $"Hello, {nameClaim.Value}" : "Hello!";
+    }
+
+    private async Task OnLoginClicked()
+    {
+        await Navigation.LoginAsync();
+    }
+
+    private async Task OnLogoutClicked()
+    {
+        await Navigation.LogoutAsync();
+    }
+
+}

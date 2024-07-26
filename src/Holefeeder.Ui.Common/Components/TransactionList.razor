@@ -1,0 +1,27 @@
+<MudCard>
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudStack Row="true">
+                <MudText Typo="Typo.body1">@Description</MudText>
+                <MudText Typo="Typo.body1">@Amount.ToString("C", CultureInfo.CurrentUICulture)</MudText>
+            </MudStack>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudStack Row="true">
+            <MudText Style="width: fit-content" Typo="Typo.caption">@Tags</MudText>
+            <MudText Typo="Typo.caption">@Date.ToString("ddd, d MMM yyyy", CultureInfo.CurrentUICulture)</MudText>
+        </MudStack>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    [Parameter]
+    public required string Description { get; init; }
+    [Parameter]
+    public required decimal Amount { get; init; }
+    [Parameter]
+    public required DateOnly Date { get; init; }
+    [Parameter]
+    public required IReadOnlyList<string> Tags { get; init; }
+}

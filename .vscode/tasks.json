@@ -2,14 +2,21 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "type": "dotnet-meteor.task",
+            "target": "build",
+            "args": [],
+            "problemMatcher": [],
+            "label": "dotnet-meteor: build",
+        },
+        {
             "label": "build",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/src/Api/Holefeeder.Api/Holefeeder.Api.csproj",
+                "${workspaceFolder}/DrifterApps.Holefeeder.sln",
                 "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+                "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
             "problemMatcher": "$msCompile"
         },
@@ -19,9 +26,9 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/Api/Holefeeder.Api/Holefeeder.Api.csproj",
+                "${workspaceFolder}/DrifterApps.Holefeeder.sln",
                 "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+                "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
             "problemMatcher": "$msCompile"
         },
@@ -32,8 +39,61 @@
             "args": [
                 "watch",
                 "run",
-                "--project",
-                "${workspaceFolder}/src/Api/Holefeeder.Api/Holefeeder.Api.csproj"
+                "${workspaceFolder}/DrifterApps.Holefeeder.sln",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "holefeeder test",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "--settings",
+                ".runsettings",
+                "--filter",
+                "FullyQualifiedName!~Holefeeder.Tests.Common"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "holefeeder code coverage report",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "reportgenerator",
+                "-reports:${workspaceFolder}/coverage/coverage.cobertura.xml",
+                "-targetdir:${workspaceFolder}/coverage",
+                "-filefilters:-*.g.cs"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "holefeeder code coverage",
+            "dependsOn": [
+                "holefeeder test",
+                "holefeeder code coverage report"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "holefeeder staging",
+            "command": "docker",
+            "type": "process",
+            "args": [
+                "compose",
+                "-f",
+                "${workspaceFolder}/docker-compose.yaml",
+                "-f",
+                "${workspaceFolder}/docker-compose.Staging.yaml",
+                "up",
+                "-d",
+                "--build"
             ],
             "problemMatcher": "$msCompile"
         }

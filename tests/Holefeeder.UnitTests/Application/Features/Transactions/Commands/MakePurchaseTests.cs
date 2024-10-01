@@ -1,6 +1,5 @@
 using Holefeeder.Domain.Features.Accounts;
 using Holefeeder.Domain.Features.Categories;
-using Holefeeder.Domain.ValueObjects;
 using Holefeeder.Tests.Common.Builders;
 using Holefeeder.Tests.Common.Extensions;
 

@@ -10,8 +10,6 @@ using Holefeeder.FunctionalTests.Infrastructure;
 using Holefeeder.FunctionalTests.StepDefinitions;
 using Holefeeder.Tests.Common;
 
-using Microsoft.EntityFrameworkCore;
-
 using static Holefeeder.Application.Features.Accounts.Commands.CloseAccount;
 using static Holefeeder.Tests.Common.Builders.Accounts.CloseAccountRequestBuilder;
 

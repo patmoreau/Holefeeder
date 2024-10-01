@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 using Holefeeder.Domain.Features.Transactions;
 using Holefeeder.Domain.Features.Users;
 using Holefeeder.Domain.ValueObjects;

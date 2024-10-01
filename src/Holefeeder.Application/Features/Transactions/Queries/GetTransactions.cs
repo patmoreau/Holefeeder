@@ -1,4 +1,3 @@
-using System.Linq.Dynamic.Core;
 using System.Reflection;
 
 using DrifterApps.Seeds.Application;
@@ -10,7 +9,6 @@ using Holefeeder.Application.Context;
 using Holefeeder.Application.Extensions;
 using Holefeeder.Application.Models;
 using Holefeeder.Application.UserContext;
-using Holefeeder.Domain.Features.Users;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

@@ -8,7 +8,6 @@ using Holefeeder.Domain.Features.Transactions;
 using Holefeeder.Domain.Features.Users;
 using Holefeeder.Domain.ValueObjects;
 using Holefeeder.Tests.Common.Builders;
-using Holefeeder.Tests.Common.Builders.Transactions;
 
 using Xunit.Abstractions;
 

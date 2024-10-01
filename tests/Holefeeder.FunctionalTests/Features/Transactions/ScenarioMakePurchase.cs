@@ -3,11 +3,8 @@ using System.Net;
 using Holefeeder.Domain.Features.Accounts;
 using Holefeeder.Domain.Features.Categories;
 using Holefeeder.Domain.Features.Transactions;
-using Holefeeder.Domain.ValueObjects;
 using Holefeeder.FunctionalTests.Drivers;
 using Holefeeder.FunctionalTests.StepDefinitions;
-
-using Microsoft.EntityFrameworkCore;
 
 using static Holefeeder.Application.Features.Transactions.Commands.MakePurchase;
 using static Holefeeder.Tests.Common.Builders.Transactions.MakePurchaseRequestBuilder;

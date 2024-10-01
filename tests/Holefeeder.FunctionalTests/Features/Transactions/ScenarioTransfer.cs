@@ -1,10 +1,7 @@
 using System.Net;
 
 using Holefeeder.Domain.Features.Accounts;
-using Holefeeder.Domain.Features.Transactions;
 using Holefeeder.FunctionalTests.Drivers;
-
-using Microsoft.EntityFrameworkCore;
 
 using static Holefeeder.Application.Features.Transactions.Commands.Transfer;
 using static Holefeeder.Tests.Common.Builders.Accounts.AccountBuilder;

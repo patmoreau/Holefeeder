@@ -1,12 +1,9 @@
 using System.Net;
 using System.Text.Json;
 
-using Holefeeder.Domain.Features.Accounts;
 using Holefeeder.FunctionalTests.Drivers;
 using Holefeeder.FunctionalTests.Infrastructure;
 using Holefeeder.Tests.Common;
-
-using Microsoft.EntityFrameworkCore;
 
 using static Holefeeder.Application.Features.Accounts.Commands.ModifyAccount;
 using static Holefeeder.Tests.Common.Builders.Accounts.AccountBuilder;

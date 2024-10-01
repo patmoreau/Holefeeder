@@ -3,14 +3,9 @@ using System.Text.Json;
 
 using Holefeeder.Application;
 using Holefeeder.Application.Features.MyData.Models;
-using Holefeeder.Domain.Features.Accounts;
-using Holefeeder.Domain.Features.Categories;
-using Holefeeder.Domain.Features.Transactions;
 using Holefeeder.FunctionalTests.Drivers;
 using Holefeeder.FunctionalTests.Infrastructure;
 using Holefeeder.Tests.Common;
-
-using Microsoft.EntityFrameworkCore;
 
 using static Holefeeder.Application.Features.MyData.Commands.ImportData;
 using static Holefeeder.Tests.Common.Builders.MyData.ImportDataRequestBuilder;

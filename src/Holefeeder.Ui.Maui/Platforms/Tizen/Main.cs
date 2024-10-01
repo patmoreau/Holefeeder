@@ -1,8 +1,3 @@
-using System;
-
-using Microsoft.Maui;
-using Microsoft.Maui.Hosting;
-
 namespace Holefeeder.Ui.Maui;
 
 class Program : MauiApplication

@@ -5,7 +5,6 @@ using Holefeeder.Application.Authorization;
 using Holefeeder.Application.Context;
 using Holefeeder.Application.Extensions;
 using Holefeeder.Application.Features.Accounts.Queries;
-using Holefeeder.Application.Features.StoreItems;
 using Holefeeder.Application.UserContext;
 using Holefeeder.Domain.Features.Accounts;
 using Holefeeder.Domain.ValueObjects;

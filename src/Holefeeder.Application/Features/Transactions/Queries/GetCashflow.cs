@@ -3,7 +3,6 @@ using DrifterApps.Seeds.Domain;
 using Holefeeder.Application.Authorization;
 using Holefeeder.Application.Context;
 using Holefeeder.Application.Extensions;
-using Holefeeder.Application.Features.StoreItems;
 using Holefeeder.Application.Models;
 using Holefeeder.Application.UserContext;
 using Holefeeder.Domain.Features.Transactions;

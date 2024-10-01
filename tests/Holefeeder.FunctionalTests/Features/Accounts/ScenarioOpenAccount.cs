@@ -8,8 +8,6 @@ using Holefeeder.FunctionalTests.Drivers;
 using Holefeeder.FunctionalTests.Infrastructure;
 using Holefeeder.Tests.Common;
 
-using Microsoft.EntityFrameworkCore;
-
 using static Holefeeder.Application.Features.Accounts.Commands.OpenAccount;
 using static Holefeeder.Tests.Common.Builders.Accounts.AccountBuilder;
 using static Holefeeder.Tests.Common.Builders.Accounts.OpenAccountRequestBuilder;

@@ -10,8 +10,6 @@ using Holefeeder.FunctionalTests.Infrastructure;
 using Holefeeder.FunctionalTests.StepDefinitions;
 using Holefeeder.Tests.Common;
 
-using Microsoft.EntityFrameworkCore;
-
 using static Holefeeder.Tests.Common.Builders.Transactions.CancelCashflowRequestBuilder;
 
 namespace Holefeeder.FunctionalTests.Features.Transactions;

@@ -5,8 +5,6 @@ using Holefeeder.Domain.Features.Categories;
 using Holefeeder.Domain.Features.Transactions;
 using Holefeeder.FunctionalTests.Drivers;
 
-using Microsoft.EntityFrameworkCore;
-
 using static Holefeeder.Application.Features.Transactions.Commands.PayCashflow;
 using static Holefeeder.Tests.Common.Builders.Accounts.AccountBuilder;
 using static Holefeeder.Tests.Common.Builders.Categories.CategoryBuilder;
